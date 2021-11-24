@@ -3,13 +3,14 @@
 namespace Jorpo\Pipeline;
 
 /**
- * @template TObject of object
+ * @template TContextObject of object
+ * @template TReturnObject of object
  */
 interface Middleware
 {
     /**
-     * @param TObject $context
-     * @return TObject
+     * @param TContextObject $context
+     * @return TReturnObject
      * @throws PipelineInterrupted
      */
     public function process(object $context): object;
