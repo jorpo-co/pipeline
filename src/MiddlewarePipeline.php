@@ -5,8 +5,6 @@ namespace Jorpo\Pipeline;
 use Ds\Vector;
 use UnderflowException;
 
-use function array_merge;
-
 class MiddlewarePipeline implements Pipeline, Middleware
 {
     private Vector $processors;
