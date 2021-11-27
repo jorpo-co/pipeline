@@ -3,12 +3,12 @@
 namespace Jorpo\Pipeline\Middleware;
 
 use Jorpo\Pipeline\Middleware;
-use Jorpo\Pipeline\PipelineInterrupted;
+use Jorpo\Pipeline\Interrupt;
 
 class DummyMiddlewareTwo implements Middleware
 {
     /**
-     * @throws PipelineInterrupted
+     * @throws Interrupt
      */
     public function process(object $context): object
     {

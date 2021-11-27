@@ -5,7 +5,7 @@ namespace Jorpo\Pipeline;
 use RuntimeException;
 use Throwable;
 
-class PipelineInterrupted extends RuntimeException
+class Interrupt extends RuntimeException
 {
     private object $context;
 

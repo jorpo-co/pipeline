@@ -11,7 +11,7 @@ interface Middleware
     /**
      * @param TContextObject $context
      * @return TReturnObject
-     * @throws PipelineInterrupted
+     * @throws Interrupt
      */
     public function process(object $context): object;
 }

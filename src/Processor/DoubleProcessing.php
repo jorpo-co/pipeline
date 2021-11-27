@@ -2,12 +2,12 @@
 
 namespace Jorpo\Pipeline\Processor;
 
-use Jorpo\Pipeline\PipelineInterrupted;
+use Jorpo\Pipeline\Interrupt;
 
 trait DoubleProcessing
 {
     /**
-     * @throws PipelineInterrupted
+     * @throws Interrupt
      */
     private function processForward(object $message, array $middlewares): object
     {
@@ -15,7 +15,7 @@ trait DoubleProcessing
     }
 
     /**
-     * @throws PipelineInterrupted
+     * @throws Interrupt
      */
     private function processReverse(object $message, array $middlewares): object
     {
