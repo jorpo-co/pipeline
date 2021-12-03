@@ -2,6 +2,7 @@
 
 namespace Jorpo\Pipeline\Middleware;
 
+use Jorpo\Pipeline\Context;
 use Jorpo\Pipeline\Middleware;
 use Jorpo\Specification\Specification;
 
@@ -16,7 +17,7 @@ class SpecificationMiddleware implements Middleware
         $this->middleware = $middleware;
     }
 
-    public function process(object $context): object
+    public function process(Context $context): Context
     {
         if (false === $this->specification->isSatisfiedBy($context)) {
             return $context;

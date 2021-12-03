@@ -3,12 +3,13 @@
 namespace Jorpo\Pipeline\Processor;
 
 use Ds\Stack;
+use Jorpo\Pipeline\Context;
 use Jorpo\Pipeline\Middleware;
 use Jorpo\Pipeline\Processor;
 
 class Reverse implements Processor
 {
-    public function process(object $context, Middleware ...$middlewares): object
+    public function process(Context $context, Middleware ...$middlewares): Context
     {
         $middlewares = new Stack($middlewares);
 

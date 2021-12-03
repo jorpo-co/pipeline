@@ -16,10 +16,10 @@ class PipelineTest extends TestCase
 {
     public function testThatEmptyPipelineWillPassThroughMessage()
     {
-        $subject = new MiddlewarePipeline;
-        $context = (object) [
+        $subject = new MiddlewarePipeline();
+        $context = new Context([
             'content' => '',
-        ];
+        ]);
 
         $passedThrough = $subject->process($context);
 
@@ -34,13 +34,13 @@ class PipelineTest extends TestCase
         $subject = new MiddlewarePipeline(
             ...$processors
         );
-        $context = (object) [
+        $context = new Context([
             'content' => '',
-        ];
+        ]);
 
-        $subject->pipe(
-            new DummyMiddlewareOne,
-            new DummyMiddlewareTwo
+        $subject->push(
+            new DummyMiddlewareOne(),
+            new DummyMiddlewareTwo()
         );
 
         $processed = $subject->process($context);
@@ -51,32 +51,66 @@ class PipelineTest extends TestCase
     public function processWithMiddleware(): array
     {
         return [
-            ['onetwo', new Forward],
-            ['twoone', new Reverse],
-            ['onetwotwoone', new Forward, new Reverse],
-            ['onetwotwoone', new ForwardThenReverse],
-            ['twooneonetwo', new Reverse, new Forward],
-            ['twooneonetwo', new ReverseThenForward],
+            ['onetwo', new Forward()],
+            ['twoone', new Reverse()],
+            ['onetwotwoone', new Forward(), new Reverse()],
+            ['onetwotwoone', new ForwardThenReverse()],
+            ['twooneonetwo', new Reverse(), new Forward()],
+            ['twooneonetwo', new ReverseThenForward()],
         ];
     }
 
     public function testThatInterruptedMiddlewareRunIsCaughtAndReturned()
     {
         $subject = new MiddlewarePipeline(
-            new Forward
+            new Forward()
         );
-        $context = (object) [
+        $context = new Context([
             'content' => '',
-        ];
+        ]);
 
-        $subject->pipe(
-            new DummyMiddlewareOne,
-            new DummyInterruptedMiddleware,
-            new DummyMiddlewareTwo
+        $subject->push(
+            new DummyMiddlewareOne(),
+            new DummyInterruptedMiddleware(),
+            new DummyMiddlewareTwo()
         );
 
         $processed = $subject->process($context);
 
         $this->assertSame('one', $processed->content);
+    }
+
+    public function testThatMiddlewareCanBeAddedToBeginningOfList(): void
+    {
+        $subject = new MiddlewarePipeline(
+            new Forward()
+        );
+        $context = new Context([
+            'content' => '',
+        ]);
+
+        $subject->push(new DummyMiddlewareOne());
+        $subject->unshift(new DummyMiddlewareTwo(), new DummyMiddlewareOne(), new DummyMiddlewareTwo());
+
+        $processed = $subject->process($context);
+
+        $this->assertSame('twoonetwoone', $processed->content);
+    }
+
+    public function testThatMiddlewareCanBeInsertedAtAnIndex(): void
+    {
+        $subject = new MiddlewarePipeline(
+            new Forward()
+        );
+        $context = new Context([
+            'content' => '',
+        ]);
+
+        $subject->push(new DummyMiddlewareOne(), new DummyMiddlewareOne(), new DummyMiddlewareOne());
+        $subject->insert(2, new DummyMiddlewareTwo());
+
+        $processed = $subject->process($context);
+
+        $this->assertSame('oneonetwoone', $processed->content);
     }
 }

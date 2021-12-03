@@ -3,12 +3,13 @@
 namespace Jorpo\Pipeline\Processor;
 
 use Ds\Queue;
+use Jorpo\Pipeline\Context;
 use Jorpo\Pipeline\Middleware;
 use Jorpo\Pipeline\Processor;
 
 class Forward implements Processor
 {
-    public function process(object $context, Middleware ...$middlewares): object
+    public function process(Context $context, Middleware ...$middlewares): Context
     {
         $middlewares = new Queue($middlewares);
 

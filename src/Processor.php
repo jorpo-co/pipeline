@@ -2,16 +2,10 @@
 
 namespace Jorpo\Pipeline;
 
-/**
- * @template TContextObject of object
- * @template TReturnObject of object
- */
 interface Processor
 {
     /**
-     * @param TContextObject $context
-     * @return TReturnObject
      * @throws Interrupt
      */
-    public function process(object $context, Middleware ...$middlewares): object;
+    public function process(Context $context, Middleware ...$middlewares): Context;
 }

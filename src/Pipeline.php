@@ -4,5 +4,7 @@ namespace Jorpo\Pipeline;
 
 interface Pipeline
 {
-    public function pipe(Middleware ...$middlewares): static;
+    public function push(Middleware ...$middlewares): static;
+    public function unshift(Middleware ...$middlewares): static;
+    public function insert(int $index, Middleware ...$middlewares): static;
 }

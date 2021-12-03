@@ -7,16 +7,16 @@ use Throwable;
 
 class Interrupt extends RuntimeException
 {
-    private object $context;
+    private Context $context;
 
-    public function __construct(object $context, int $number = 0, Throwable $error = null)
+    public function __construct(Context $context, int $number = 0, Throwable $error = null)
     {
         $this->context = $context;
 
         parent::__construct("Pipeline run interrupted.", $number, $error);
     }
 
-    public function context(): object
+    public function context(): Context
     {
         return $this->context;
     }

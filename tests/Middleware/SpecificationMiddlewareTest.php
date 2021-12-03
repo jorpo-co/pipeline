@@ -2,6 +2,7 @@
 
 namespace Jorpo\Pipeline\Middleware;
 
+use Jorpo\Pipeline\Context;
 use PHPUnit\Framework\TestCase;
 
 class SpecificationMiddlewareTest extends TestCase
@@ -9,12 +10,12 @@ class SpecificationMiddlewareTest extends TestCase
     public function testThatMiddlewarePassesOriginalMessageIfSpecificationFails()
     {
         $middleware = new SpecificationMiddleware(
-            new AlwaysFalseSpecification,
-            new DummyMiddlewareOne
+            new AlwaysFalseSpecification(),
+            new DummyMiddlewareOne()
         );
-        $context = (object) [
+        $context = new Context([
             'content' => '',
-        ];
+        ]);
 
         $processedRequest = $middleware->process($context);
         $this->assertEmpty($processedRequest->content);
@@ -23,12 +24,12 @@ class SpecificationMiddlewareTest extends TestCase
     public function testThatMiddlewareProcessesMessageIfSpecificationPasses()
     {
         $middleware = new SpecificationMiddleware(
-            new AlwaysTrueSpecification,
-            new DummyMiddlewareOne
+            new AlwaysTrueSpecification(),
+            new DummyMiddlewareOne()
         );
-        $context = (object) [
+        $context = new Context([
             'content' => '',
-        ];
+        ]);
 
         $processedRequest = $middleware->process($context);
         $this->assertSame('one', $processedRequest->content);

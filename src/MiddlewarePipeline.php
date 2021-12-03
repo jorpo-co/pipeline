@@ -3,7 +3,6 @@
 namespace Jorpo\Pipeline;
 
 use Ds\Vector;
-use UnderflowException;
 
 class MiddlewarePipeline implements Pipeline, Middleware
 {
@@ -16,22 +15,35 @@ class MiddlewarePipeline implements Pipeline, Middleware
         $this->middlewares = new Vector();
     }
 
-    public function pipe(Middleware ...$middlewares): static
+    public function push(Middleware ...$middlewares): static
     {
         $this->middlewares = $this->middlewares->merge($middlewares);
 
         return $this;
     }
 
-    public function process(object $context): object
+    public function unshift(Middleware ...$middlewares): static
+    {
+        $this->middlewares->unshift(...$middlewares);
+
+        return $this;
+    }
+
+    public function insert(int $index, Middleware ...$middlewares): static
+    {
+        $this->middlewares->insert($index, ...$middlewares);
+
+        return $this;
+    }
+
+    public function process(Context $context): Context
     {
         $processors = clone $this->processors;
 
         try {
-            while ($processor = $processors->shift()) {
+            while (!$processors->isEmpty() && $processor = $processors->shift()) {
                 $context = $processor->process($context, ...$this->middlewares);
             }
-        } catch (UnderflowException $error) {
         } catch (Interrupt $interrupt) {
             $context = $interrupt->context();
         }

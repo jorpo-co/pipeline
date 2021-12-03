@@ -2,18 +2,19 @@
 
 namespace Jorpo\Pipeline\Middleware;
 
-use Jorpo\Pipeline\Middleware;
+use Jorpo\Pipeline\Context;
 use Jorpo\Pipeline\Interrupt;
+use Jorpo\Pipeline\Middleware;
 
 class DummyMiddlewareOne implements Middleware
 {
     /**
      * @throws Interrupt
      */
-    public function process(object $context): object
+    public function process(Context $context): Context
     {
-        $context->content .= 'one';
-
-        return $context;
+        return new Context([
+            'content' => $context->content .= 'one',
+        ]);
     }
 }
